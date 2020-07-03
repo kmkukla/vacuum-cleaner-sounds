@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacuum cleaner sounds</title>
+    <link rel="stylesheet" href="./styles/style.scss">
+</head>
+
+<body>
+    <div class="circle"></div>
+    <h1 class="title">vacuum cleaner <span class="white">sounds</span></h1>
+    <main class="app-container">
+        <div class="time-select">
+            <button data-time="0.2" class="btn-duration">2 Minutes</button>
+            <button data-time="5" class="btn-duration">5 Minutes</button>
+            <button data-time="10" class="btn-duration">10 Minutes</button>
+            <button data-time="30" class="btn-duration">30 Minutes</button>
+            <button data-time="60" class="btn-duration">60 Minutes</button>
+            <img src="./svg/clock.svg" alt="clock" class="clock">
+        </div>
+        <div class="player-container">
+            <audio class="sound">
+                <source src="./sounds/classic.mp3">
+            </audio>
+            <img src="./svg/play.svg" alt="play/pause" class="play">
+            <div class="time-display">0:00</div>
+        </div>
+        <div class="sound-picker">
+            <img src="./svg/vacuum-cleaner.svg" alt="vacuum-cleaner" class="vacuum-cleaner">
+            <button data-sound="./public/sounds/classic.mp3" class="btn-sound">Classic</button>
+            <button data-sound="./public/sounds/old.mp3" class="btn-sound">Old</button>
+        </div>
+    </main>
+    <script src="./app.js"></script>
+</body>
+
+</html>
