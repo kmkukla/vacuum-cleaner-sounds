@@ -1,9 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&display=swap");
 
-@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/all.min.js";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css";
 
 $bgcolor: #ffd900;
 $font-color: #090c08;
+$gold-fusion: #79745c;
 
 * {
   margin: 0;
@@ -13,33 +14,36 @@ $font-color: #090c08;
 
 html {
   font-family: "Open Sans", sans-serif;
+  background-color: $font-color;
+  padding: 13px;
 }
 
 body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(#ffd900, #ffc510);
-  height: 100vh;
+  min-height: calc(100vh - 13px * 2);
   padding: 0 15px;
-  overflow: hidden;
 }
 
-.circle {
+.logo {
   position: absolute;
   top: 0;
   right: 0;
-  height: 45vw;
-  width: 45vw;
-  transform: translate(50%, -50%);
+  height: 5rem;
+  width: 5rem;
   background-color: white;
-  border-radius: 50%;
+  border-radius: 0 0 0 50%;
   background-image: url("../svg/analyze-sound-wave.svg");
   background-repeat: no-repeat;
-  background-position: left 25% bottom 25%;
-  background-size: 10vw 10vw;
+  background-position: center;
+  background-size: 3rem 3rem;
 }
 
 .title {
-  color: #090c08;
-  font-size: 3rem;
+  color: $font-color;
+  font-size: 2.5rem;
   text-transform: uppercase;
   line-height: 1;
   padding: 1rem 20vw 1rem 1rem;
@@ -54,14 +58,107 @@ body {
   display: grid;
   grid-gap: 1rem;
   align-items: start;
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-columns: 1fr;
+  grid-template-rows: repeat(5, auto);
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.time-select,
+.sound-picker,
+.player-container,
+.volume-control {
+  background-color: $gold-fusion;
+  padding: 13px;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px,
+    rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.main-text {
+  grid-column: 1/3;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+
+  & p {
+    margin-top: 3px;
+  }
 }
 
 .time-select,
 .sound-picker {
+  flex-direction: column;
+}
+
+.player-container {
+  grid-column: 1/3;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(3, 1fr);
+
+  .play {
+    cursor: pointer;
+    height: 40px;
+    grid-column: 2/3;
+    justify-self: center;
+    align-self: center;
+    margin: 3px 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+
+  .play-img {
+    max-height: 100%;
+  }
+
+  .time-display {
+    grid-column: 3/4;
+    justify-self: end;
+    font-size: 1.1rem;
+    color: white;
+  }
+}
+
+.volume-control {
+  grid-column: 1/3;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+
+  .volume-slider {
+    flex-grow: 1;
+    padding: 0 0.7rem;
+  }
+
+  .range {
+    width: 100%;
+    height: 15px;
+    display: block;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    background-color: $font-color;
+    border-radius: 8px;
+  }
+
+  .range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 23px;
+    width: 23px;
+    background-color: #ffc510;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .range::-moz-range-thumb {
+    height: 23px;
+    width: 23px;
+    background-color: #ffc510;
+    border-radius: 50%;
+    cursor: pointer;
+  }
 }
 
 .btn-duration,
@@ -71,74 +168,90 @@ body {
   color: white;
   font-family: "Open Sans", sans-serif;
   margin: 0.1rem;
-  font-size: 0.9rem;
-  padding: 7px 10px;
+  font-size: 0.8rem;
+  padding: 6px 9px;
   cursor: pointer;
 }
 
-.player-container {
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.play {
-  cursor: pointer;
-}
-
-.time-display {
-  font-size: 2.5rem;
-  font-family: "Open Sans", sans-serif;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin-top: 1rem;
-}
-
-.clock {
-  margin: 0.1rem;
-}
-
-.vacuum-cleaner {
-  display: none;
-}
 
 // **************media queries***************
 @media (min-width: 1025px) {
-  .circle {
-    width: 35vw;
-    height: 35vw;
-    background-size: 7vw 7vw;
+  .logo {
+    width: 6rem;
+    height: 6rem;
+    background-size: 3.5rem 3.5rem;
   }
+
   .title {
-    font-size: 5rem;
+    font-size: 4rem;
   }
+
   .app-container {
-    max-width: 70vw;
+    align-items: stretch;
+    flex-grow: 1;
+    flex-basis: 100%;
+    grid-gap: 2rem;
+    margin-top: 0.5rem;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr;
+    grid-template-rows: repeat(2, 45%);
   }
-  .time-select,
-  .sound-picker {
-    height: 100%;
-    flex-direction: column;
+
+  .main-text {
+    grid-row: 1/3;
+    grid-column: 1/2;
+    font-size: 1rem;
   }
+
   .btn-duration,
   .btn-sound {
-    font-size: 1rem;
-    padding: 14px 20px;
+    flex-grow: 1;
     transition: 0.2s;
+
     &:hover {
-      transform: translateX(5%);
+      background-color: $gold-fusion;
     }
   }
-  .vacuum-cleaner {
-    display: block;
-    margin: 0.1rem;
+
+  .time-select {
+    grid-column: 2/3;
+    grid-row: 1/2;
   }
-  .clock {
-    flex-grow: 1;
-    margin: 1rem;
+
+  .sound-picker {
+    grid-column: 2/3;
+    grid-row: 2/3;
+  }
+
+  .player-container,
+  .volume-control {
+    grid-column: 3/4;
+  }
+
+  .btn-duration,
+  .btn-sound {
+    font-size: 0.9rem;
+  }
+
+  .player-container {
+    padding: 26px;
+
+    .play {
+      height: 60px;
+    }
+
+    .time-display {
+      font-size: 1.6rem;
+      margin-right: 5px;
+      color: white;
+    }
+  }
+
+  .volume-control {
+    padding: 26px;
+    font-size: 1.6rem;
+
+    .volume-slider {
+      padding: 0 1rem;
+    }
   }
 }

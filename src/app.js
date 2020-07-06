@@ -1,54 +1,85 @@
 const sound = document.querySelector(".sound");
-const play = document.querySelector(".play");
-const sounds = document.querySelectorAll(".btn-sound");
+const volumeControl = document.querySelector(".range");
+const durationBtns = document.querySelectorAll(".btn-duration");
+const soundBtns = document.querySelectorAll(".btn-sound");
 const timeDisplay = document.querySelector(".time-display");
-const timeSelect = document.querySelectorAll(".btn-duration");
-let fakeDuration = 600;
-sound.volume = 0.1;
+const playPauseBtn = document.querySelector(".play");
+const playPauseImg = document.querySelector(".play-img");
+let duration, remaining, timeout;
 
-play.addEventListener("click", () => {
-  checkPlaying(sound);
+playPauseBtn.addEventListener("click", togglePlayPause);
+
+document.addEventListener("DOMContentLoaded", function setDefault() {
+  sound.src = "./sounds/classic-crop.mp3";
+  playPauseImg.src = "./svg/play.svg";
+  sound.volume = volumeControl.value / 400;
+  duration = 5;
+  remaining = duration;
 });
-const checkPlaying = (sound) => {
+
+sound.addEventListener("timeupdate", function playInLoop() {
+  var buffer = 0.44;
+  if (sound.currentTime > sound.duration - buffer) {
+    sound.currentTime = 0;
+    sound.play();
+  }
+});
+
+soundBtns.forEach((btn) =>
+  btn.addEventListener("click", function selectSoundAndPlay() {
+    resetTime();
+    sound.src = this.dataset.sound;
+    togglePlayPause();
+  })
+);
+
+durationBtns.forEach((btn) =>
+  btn.addEventListener("click", function () {
+    duration = this.dataset.time * 60;
+    resetTime();
+    displayTime(duration);
+  })
+);
+
+volumeControl.addEventListener("input", function () {
+  sound.volume = volumeControl.value / 400;
+});
+
+function togglePlayPause() {
   if (sound.paused) {
     sound.play();
-    play.src = "./public/svg/pause.svg";
+    playPauseImg.src = "./svg/pause.svg";
+    updateTime();
   } else {
+    clearTimeout(timeout);
     sound.pause();
-    play.src = "./public/svg/play.svg";
+    playPauseImg.src = "./svg/play.svg";
   }
-};
+}
 
-timeSelect.forEach((option) => {
-  option.addEventListener("click", function () {
-    fakeDuration = this.getAttribute("data-time") * 60;
-    let seconds = Math.floor(fakeDuration % 60);
-    let minutes = Math.floor(fakeDuration / 60);
-    timeDisplay.textContent = `${minutes < 10 ? "0" + minutes : minutes}:${
-      seconds < 10 ? "0" + seconds : seconds
-    }`;
-    sound.currentTime = 0;
-  });
-});
+function updateTime() {
+  remaining = remaining - 1;
 
-sound.ontimeupdate = function () {
-  let currentTime = sound.currentTime;
-  let elapsed = fakeDuration - currentTime;
-  let seconds = Math.floor(elapsed % 60);
-  let minutes = Math.floor(elapsed / 60);
+  displayTime(remaining);
+
+  if (remaining > 0) {
+    timeout = setTimeout(updateTime, 1000);
+  } else {
+    resetTime();
+  }
+}
+
+function displayTime(time) {
+  let seconds = Math.floor(time % 60);
+  let minutes = Math.floor(time / 60);
   timeDisplay.textContent = `${minutes < 10 ? "0" + minutes : minutes}:${
     seconds < 10 ? "0" + seconds : seconds
   }`;
-  if (currentTime >= fakeDuration) {
-    sound.pause();
-    sound.currentTime = 0;
-    play.src = "./public/svg/play.svg";
-  }
-};
+}
 
-sounds.forEach((soundBtn) => {
-  soundBtn.addEventListener("click", function () {
-    sound.src = this.getAttribute("data-sound");
-    checkPlaying(sound);
-  });
-});
+function resetTime() {
+  clearTimeout(timeout);
+  sound.pause();
+  playPauseImg.src = "./svg/play.svg";
+  remaining = duration;
+}
